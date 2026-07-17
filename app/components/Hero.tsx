@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import SearchBar from "./SearchBar";
 
 export default function Hero() {
+  const [search, setSearch] = useState("");
+
   return (
     <section className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <h1 className="text-5xl font-bold mb-6">
@@ -12,7 +17,10 @@ export default function Hero() {
         video editing, marketing, and productivity—all in one place.
       </p>
 
-      <SearchBar />
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+      />
 
       <div className="mt-10 flex gap-4">
         <button className="rounded-lg bg-blue-600 px-6 py-3 font-semibold hover:bg-blue-700">
