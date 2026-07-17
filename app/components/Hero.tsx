@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import SearchBar from "./SearchBar";
 
-export default function Hero() {
-  const [search, setSearch] = useState("");
+type HeroProps = {
+  search: string;
+  setSearch: (value: string) => void;
+};
 
+export default function Hero({ search, setSearch }: HeroProps) {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <h1 className="text-5xl font-bold mb-6">
@@ -13,8 +15,8 @@ export default function Hero() {
       </h1>
 
       <p className="max-w-2xl text-gray-300 text-lg">
-        Discover the best AI tools for writing, coding, designing,
-        video editing, marketing, and productivity—all in one place.
+        Discover the best AI tools for writing, coding, designing, video editing,
+        marketing, and productivity—all in one place.
       </p>
 
       <SearchBar
