@@ -1,6 +1,5 @@
 import ToolCard from "./ToolCard";
 import { tools } from "../data/tools";
-
 export default function CategorySection() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20">
