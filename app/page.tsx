@@ -1,82 +1,57 @@
-"use client";
-
-import { useState } from "react";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import ToolCard from "./components/ToolCard";
-import CategorySection from "./components/CategorySection";
 import Footer from "./components/Footer";
-import { tools } from "./data/tools";
+import ToolCard from "./components/ToolCard";
+import Hero from "./components/Hero";
+import Stats from "./components/Stats";
+import { supabase } from "../lib/supabase";
+import CategorySection from "./components/CategorySection";
+import Trending from "./components/Trending";
+import FeaturedTool from "./components/FeaturedTool";
+export default async function Home() {
+  const { data: tools, error } = await supabase
+    .from("tools")
+    .select("*")
+    .order("id");
 
-export default function Home() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-
-  const filteredTools = tools.filter((tool) => {
-    const matchesSearch =
-      tool.name.toLowerCase().includes(search.toLowerCase()) ||
-      tool.category.toLowerCase().includes(search.toLowerCase());
-
-    const matchesCategory =
-      category === "All" || tool.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const categories = [
-    "All",
-    "Writing",
-    "Coding",
-    "Image",
-    "Video",
-    "Productivity",
-  ];
+  if (error) {
+    return (
+      <main className="min-h-screen bg-black p-10 text-white">
+        <h1 className="text-3xl font-bold text-red-500">
+          Failed to load AI tools
+        </h1>
+        <p className="mt-4">{error.message}</p>
+      </main>
+    );
+  }
 
   return (
     <>
       <Navbar />
+      <Hero />
+
+      <Trending />
+
+      <FeaturedTool />
 
       <main className="min-h-screen bg-black text-white">
-        <Hero search={search} setSearch={setSearch} />
+        <section className="mx-auto max-w-7xl px-6 py-20">
+          <h1 className="mb-4 text-center text-5xl font-bold">
+            🚀 AI Toolkit Hub
+          </h1>
 
-        <section className="max-w-7xl mx-auto px-6 py-20">
-          <h2 className="text-4xl font-bold text-center mb-8">
-            🔥 Featured AI Tools
-          </h2>
-
-          {/* Category Buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
-            {categories.map((item) => (
-              <button
-                key={item}
-                onClick={() => setCategory(item)}
-                className={`px-5 py-2 rounded-full transition ${
-                  category === item
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 hover:bg-gray-700"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+          <p className="mb-12 text-center text-gray-400">
+            Browse AI tools directly from your Supabase database.
+          </p>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {filteredTools.map((tool) => (
+            {tools?.map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
           </div>
-
-          {filteredTools.length === 0 && (
-            <p className="text-center text-gray-400 mt-10">
-              No AI tools found.
-            </p>
-          )}
         </section>
-
-        <CategorySection />
       </main>
-
+      <Stats />
+      <CategorySection />
       <Footer />
     </>
   );
