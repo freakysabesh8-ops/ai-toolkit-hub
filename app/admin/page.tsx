@@ -20,6 +20,16 @@ type Tool = {
   trending: boolean,
 };
 
+type Blog = {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  content: string;
+  image: string;
+  category: string;
+};
+
 export default function AdminPage() {
   const emptyForm = {
     slug: "",
@@ -41,12 +51,29 @@ export default function AdminPage() {
 
   const [form, setForm] = useState(emptyForm);
 
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+const emptyBlog = {
+  title:"",
+  slug:"",
+  description:"",
+  content:"",
+  image:"",
+  category:"",
+};
+
+const [blogForm,setBlogForm] = useState(emptyBlog);
+
+const [editingBlogId,setEditingBlogId] = useState<number | null>(null);
+
   useEffect(() => {
     async function init() {
       const allowed = await checkAdmin();
 
       if (allowed) {
         await loadTools();
+        await loadBlogs();
+
       }
     }
 
@@ -94,6 +121,20 @@ export default function AdminPage() {
     }
     
     return true;
+  }
+
+  async function loadBlogs(){
+
+   const {data,error}=await supabase
+   .from("blogs")
+   .select("*")
+   .order("id",{ascending:false});
+
+
+   if(!error && data){
+     setBlogs(data);
+   }
+
   }
 
   async function saveTool(e: React.FormEvent) {
