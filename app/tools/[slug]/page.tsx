@@ -412,7 +412,7 @@ export default async function ToolPage({
 
         {/* Related Tools */}
 
-        {relatedTools?.length > 0 && (
+        {relatedTools && relatedTools.length > 0 && (
 
         <section className="mt-20">
 
@@ -437,7 +437,7 @@ export default async function ToolPage({
             "
           >
 
-          {relatedTools.map((item)=>(
+          {relatedTools?.map((item)=>(
             
             <Link
               key={item.id}
